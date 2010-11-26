@@ -139,9 +139,12 @@ class phpGitHubApiRequest
     
     $curlOptions = array();
 
-    if($this->options['login'])
+    if($this->options['login'] || $this->options['auth_method'] == phpGitHubApi::AUTH_OAUTH)
     {
       switch($this->options['auth_method']) {
+        case phpGitHubApi::AUTH_OAUTH:
+          $parameters['access_token'] = $this->options['secret'];
+          break;
         case phpGitHubApi::AUTH_HTTP_PASSWORD:
           $curlOptions += array(
             CURLOPT_USERPWD => $this->options['login'] . ':' . $this->options['secret'],
@@ -162,7 +165,6 @@ class phpGitHubApiRequest
       }
 
     }
-
     if (!empty($parameters))
     {
       $queryString = utf8_encode(http_build_query($parameters, '', '&'));

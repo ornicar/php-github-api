@@ -32,6 +32,12 @@ class phpGitHubApi
   const AUTH_HTTP_TOKEN = 'http_token';
 
   /**
+   * Constant for authentication method. Indicates the new login method using oAuth
+   * @see https://gist.github.com/419219
+   */
+  const AUTH_OAUTH = 'oauth';
+
+  /**
    * The request instance used to communicate with GitHub
    * @var phpGitHubApiRequest
    */
@@ -79,6 +85,50 @@ class phpGitHubApi
     ->setOption('secret', $secret);
 
     return $this;
+  }
+
+  /**
+   * Authenticate a user by GitHub oAuth
+   *
+   * @throws phpGitHubApiRequestException
+   * @param  string     $client_id      GitHub application client id
+   * @param  string     $redirect_url   GitHub application redirect url
+   * @param  string     $client_secret  GitHub application client secret
+   * @param  string     $code           Code, returned from GitHub after user's authorization
+   * @return phpGitHubApi               fluent interface
+   */
+  public function authenticateOAuth($client_id, $redirect_url, $client_secret, $code)
+  {
+    $ch = curl_init('https://github.com/login/oauth/access_token');
+    curl_setopt_array($ch, array(
+      CURLOPT_RETURNTRANSFER => 1,
+      CURLOPT_FOLLOWLOCATION => 1,
+      CURLOPT_HEADER => 0,
+      CURLOPT_POST => 1,
+      CURLOPT_POSTFIELDS => array(
+        'client_id' => $client_id,
+        'redirect_url' => $redirect_url,
+        'client_secret' => $client_secret,
+        'code' => $code
+      )
+    ));
+    $response = curl_exec($ch);
+    curl_close($ch);
+
+    if (preg_match('/^access_token=([0-9a-f]+)$/u', $response, $matches)) {
+       $token = $matches[1];
+       return $this->authenticate(null, $token, self::AUTH_OAUTH);
+    }
+
+    throw new phpGitHubApiRequestException("Not authenticated using oAuth");
+  }
+
+  public function getUserAuthorizationUrl($client_id, $redirect_url, $scope = null) {
+      $url = 'https://github.com/login/oauth/authorize?client_id='.$client_id.'&redirect_uri='.$redirect_url;
+      if (isset($scope)) {
+          $url .= '&scope='.$scope;
+      }
+      return $url;
   }
 
   /**
