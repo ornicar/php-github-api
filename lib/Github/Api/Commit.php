@@ -21,9 +21,25 @@ class Github_Api_Commit extends Github_Api
      */
     public function getBranchCommits($username, $repo, $branch)
     {
-        $response = $this->get('commits/list/'.urlencode($username).'/'.urlencode($repo).'/'.urlencode($branch));
+	$url = 'commits/list/'.urlencode($username).'/'.urlencode($repo).'/'.urlencode($branch);
 
-        return $response['commits'];
+	$totalCommits = array();
+	$pageNr = 1;
+	$parameters = array('page' => $pageNr);
+	
+        $response = $this->api->get($url, $parameters);
+	
+	while (count($response['commits']) == 35)
+	{
+		$totalCommits = array_merge($totalCommits, $response['commits']);
+		$pageNr++;
+		$parameters = array('page' => $pageNr);		
+		$response = $this->api->get($url, $parameters);
+	}
+
+	$totalCommits = array_merge($totalCommits, $response['commits']);
+	
+        return $totalCommits;
     }
 
     /**
