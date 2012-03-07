@@ -1,3 +1,7 @@
+V4.0 - 2012-03-07
+
+ * Add support for github API v3
+
 V3.2 - 2011-06-09
 
  * Add pull request API thanks to https://github.com/jeanvoye
