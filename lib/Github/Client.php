@@ -244,7 +244,7 @@ class Github_Client
      * @param   string                $name the API name
      * @param   Github_ApiInterface  $api  the API instance
      *
-     * @return  null
+     * @return  Github_ApiInterface  the API instance
      */
     public function setApi($name, Github_ApiInterface $instance)
     {
