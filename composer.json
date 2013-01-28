@@ -1,23 +1,23 @@
 {
-    "name": "ornicar/github-api",
-    "type": "library",
-    "description": "GitHub API",
-    "version": "3.3",
-    "homepage": "https://github.com/ornicar/php-github-api",
-    "keywords": ["github", "api", "gist"],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thibault Duplessis",
-            "email": "thibault.duplessis@gmail.com",
-            "homepage": "http://ornicar.github.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.2",
-        "ext-curl": "*"
-    },
-    "autoload": {
-        "psr-0": { "Github_": "lib/" }
-    }
+		"name": "ornicar/github-api",
+		"type": "library",
+		"description": "GitHub API",
+		"version": "3.3",
+		"homepage": "https://github.com/ornicar/php-github-api",
+		"keywords": ["github", "api", "gist"],
+		"license": "MIT",
+		"authors": [
+				{
+						"name": "Thibault Duplessis",
+						"email": "thibault.duplessis@gmail.com",
+						"homepage": "http://ornicar.github.com"
+				}
+		],
+		"require": {
+				"php": ">=5.2",
+				"ext-curl": "*"
+		},
+		"autoload": {
+				"psr-0": { "Github_": "lib/" }
+		}
 }
